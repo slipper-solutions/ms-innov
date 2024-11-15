@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Upload, X, Tag, Sparkle, BarChart3, Camera, ArrowUpRight } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
+import { LoadingSpinner } from '../components/LoadingSpinner';
 
 interface DenseCaption {
   text: string;
@@ -47,21 +48,6 @@ interface LoadingStates {
   generation: boolean;
 }
 
-// Add loading spinner component
-const LoadingSpinner = ({ message }: { message?: LoadingMessage }) => (
-  <div className="flex flex-col items-center justify-center p-4 space-y-3">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
-    {message?.main && (
-      <div className="text-center">
-        <p className="text-sm font-medium text-gray-700">{message.main}</p>
-        {message.sub && (
-          <p className="text-xs text-gray-500 mt-1">{message.sub}</p>
-        )}
-      </div>
-    )}
-  </div>
-);
-
 // Update the interface to match the correct API response
 interface ScoreAndPromptResponse {
   score: number;
@@ -71,12 +57,6 @@ interface ScoreAndPromptResponse {
 // Add interface for the image generation response
 interface ImageGenerationResponse {
   url: string;
-}
-
-// Add a loading message state
-interface LoadingMessage {
-  main: string;
-  sub?: string;
 }
 
 export function ImagePage() {
@@ -92,7 +72,6 @@ export function ImagePage() {
     prompt: false,
     generation: false,
   });
-  const [loadingMessage, setLoadingMessage] = useState<LoadingMessage>({ main: '' });
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -119,11 +98,6 @@ export function ImagePage() {
     const result: Partial<ImageAnalysis> = {};
     
     try {
-      setLoadingMessage({
-        main: "Analyzing Image",
-        sub: "Calculating performance score..."
-      });
-      // Score and Prompt Analysis
       setLoadingStates(prev => ({ ...prev, score: true, prompt: true }));
       console.log('Requesting score and prompt analysis...');
       const scoreResponse = await fetch('https://recommendationapi-cebwf2ccf6cwgceq.swedencentral-01.azurewebsites.net/api/ImageRecommendation/analyze-file', {
@@ -141,11 +115,6 @@ export function ImagePage() {
       result.score = scoreData.score * 100;
       result.suggestedPrompt = scoreData.imageGenerationPrompt;
 
-      setLoadingMessage({
-        main: "Analyzing Image",
-        sub: "Detecting elements and objects..."
-      });
-      // Tags Analysis
       setLoadingStates(prev => ({ ...prev, tags: true }));
       console.log('Requesting tags analysis...');
       const tagsResponse = await fetch('https://recommendationapi-cebwf2ccf6cwgceq.swedencentral-01.azurewebsites.net/api/ImageAnalysis/tags-file', {
@@ -160,11 +129,6 @@ export function ImagePage() {
       const tagsData = await tagsResponse.json();
       result.tags = tagsData.values;
 
-      setLoadingMessage({
-        main: "Analyzing Image",
-        sub: "Generating detailed captions..."
-      });
-      // Captions Analysis
       setLoadingStates(prev => ({ ...prev, captions: true }));
       console.log('Requesting dense captions...');
       const captionsResponse = await fetch('https://recommendationapi-cebwf2ccf6cwgceq.swedencentral-01.azurewebsites.net/api/ImageAnalysis/dense-captions-file', {
@@ -183,7 +147,6 @@ export function ImagePage() {
       setError(error instanceof Error ? error.message : 'Failed to analyze image');
     } finally {
       setLoadingStates(prev => ({ ...prev, score: false, prompt: false, tags: false, captions: false }));
-      setLoadingMessage({ main: '' });
     }
 
     // Return the results, with default values for missing data
@@ -256,24 +219,19 @@ export function ImagePage() {
         <h3 className="font-semibold text-gray-900">Detected Elements</h3>
       </div>
       
-      {loadingStates.tags ? (
-        <LoadingSpinner message={loadingMessage} />
-      ) : (
-        <ScrollableContent className="space-y-2">
-          {Array.isArray(currentImage.tags) && currentImage.tags
-            .filter(tag => tag.confidence > 0.7)
-            .sort((a, b) => b.confidence - a.confidence)
-            .map((tag, index) => (
-              <div key={index} className="space-y-0.5">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-700 font-medium capitalize">{tag.name}</span>
-                  <span className="text-gray-500 ml-2">{(tag.confidence * 100).toFixed(1)}%</span>
-                </div>
-                {renderConfidenceBar(tag.confidence)}
-              </div>
-            ))}
-        </ScrollableContent>
-      )}
+      {loadingStates.tags && <LoadingSpinner type="image" />}
+      {Array.isArray(currentImage.tags) && currentImage.tags
+        .filter(tag => tag.confidence > 0.7)
+        .sort((a, b) => b.confidence - a.confidence)
+        .map((tag, index) => (
+          <div key={index} className="space-y-0.5">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-700 font-medium capitalize">{tag.name}</span>
+              <span className="text-gray-500 ml-2">{(tag.confidence * 100).toFixed(1)}%</span>
+            </div>
+            {renderConfidenceBar(tag.confidence)}
+          </div>
+        ))}
     </Card>
   );
 
@@ -286,34 +244,25 @@ export function ImagePage() {
         <h3 className="font-semibold text-gray-900">Dense Captions</h3>
       </div>
       
-      {loadingStates.captions ? (
-        <LoadingSpinner message={loadingMessage} />
-      ) : (
-        <ScrollableContent className="space-y-2">
-          {Array.isArray(currentImage.captions) && currentImage.captions
-            .filter(caption => caption.confidence > 0.7)
-            .sort((a, b) => b.confidence - a.confidence)
-            .map((caption, index) => (
-              <div key={index} className="space-y-0.5">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-700 font-medium">{caption.text}</span>
-                  <span className="text-gray-500 ml-2">{(caption.confidence * 100).toFixed(1)}%</span>
-                </div>
-                {renderConfidenceBar(caption.confidence)}
-              </div>
-            ))}
-        </ScrollableContent>
-      )}
+      {loadingStates.captions && <LoadingSpinner type="image" />}
+      {Array.isArray(currentImage.captions) && currentImage.captions
+        .filter(caption => caption.confidence > 0.7)
+        .sort((a, b) => b.confidence - a.confidence)
+        .map((caption, index) => (
+          <div key={index} className="space-y-0.5">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-700 font-medium">{caption.text}</span>
+              <span className="text-gray-500 ml-2">{(caption.confidence * 100).toFixed(1)}%</span>
+            </div>
+            {renderConfidenceBar(caption.confidence)}
+          </div>
+        ))}
     </Card>
   );
 
   // Add a function to handle image generation
   const handleGenerateImage = async (prompt: string) => {
     setLoadingStates(prev => ({ ...prev, generation: true }));
-    setLoadingMessage({
-      main: "Starting AI Image Generation",
-      sub: "Initializing creative process..."
-    });
 
     try {
       const generationResponse = await fetch('https://recommendationapi-cebwf2ccf6cwgceq.swedencentral-01.azurewebsites.net/api/ImageRecommendation/generate', {
@@ -341,7 +290,6 @@ export function ImagePage() {
       setError(error instanceof Error ? error.message : 'Failed to generate image');
     } finally {
       setLoadingStates(prev => ({ ...prev, generation: false }));
-      setLoadingMessage({ main: '' });
     }
   };
 
@@ -356,9 +304,8 @@ export function ImagePage() {
       </div>
       
       <div className="space-y-4">
-        {loadingStates.prompt ? (
-          <LoadingSpinner message={loadingMessage} />
-        ) : currentImage.suggestedPrompt ? (
+        {loadingStates.prompt && <LoadingSpinner type="copy" />}
+        {currentImage.suggestedPrompt ? (
           <div className="space-y-2">
             <h4 className="text-sm font-medium text-gray-700">Suggested Prompt</h4>
             <p className="text-sm text-gray-600 p-3 bg-gray-50 rounded-lg">
@@ -380,12 +327,8 @@ export function ImagePage() {
           </div>
         )}
         
-        {loadingStates.generation ? (
-          <div className="space-y-2">
-            <h4 className="text-sm font-medium text-gray-700">AI Generation in Progress</h4>
-            <LoadingSpinner message={loadingMessage} />
-          </div>
-        ) : currentImage.generatedImageUrl && (
+        {loadingStates.generation && <LoadingSpinner type="generation" />}
+        {currentImage.generatedImageUrl && (
           <div className="space-y-2">
             <h4 className="text-sm font-medium text-gray-700">AI Generated Alternative</h4>
             <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-50">

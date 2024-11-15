@@ -31,8 +31,8 @@ function App() {
 
       {/* Main content - adjusted header height and background */}
       <div className="flex-1">
-        <div className="p-8 bg-[#F8F9FD] border-b border-gradient-to-r from-blue-100/50 to-purple-100/50 shadow-md relative z-[5]">
-          <WKLogo className="h-7.5 w-auto" />
+        <div className="p-7 bg-[#F8F9FD] border-b border-gradient-to-r from-blue-100/50 to-purple-100/50 shadow-md relative z-[5]">
+          <WKLogo className="h-7 w-auto" />
         </div>
         
         <div className="p-6 relative">

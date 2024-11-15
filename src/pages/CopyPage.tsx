@@ -4,6 +4,7 @@ import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Card } from '../components/Card';
 import defaultPreview from '../assets/default-preview.jpeg';
+import { LoadingSpinner } from '../components/LoadingSpinner';
 
 interface PerformanceScore {
   score: number;
@@ -116,7 +117,9 @@ export function CopyPage() {
           disabled={isAnalyzing[type]}
           icon={BarChart2}
         >
-          {isAnalyzing[type] ? "Analyzing..." : "Analyze"}
+          {isAnalyzing[type] ? (
+            <LoadingSpinner type="copy" className="py-1" />
+          ) : "Analyze"}
         </Button>
       </div>
 

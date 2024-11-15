@@ -190,14 +190,14 @@ export function CopyPage() {
       </div>
 
       <div className="w-96">
-        <Card>
+        <Card className="relative transition-all hover:shadow-lg">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Preview</h2>
+            <h2 className="text-lg font-semibold bg-gradient-to-r from-[#4472CA] via-[#5E4BB6] to-[#6366F1] bg-clip-text text-transparent">Preview</h2>
             <Button variant="ghost" size="sm" icon={Info} />
           </div>
 
-          <div className="border rounded-lg p-4 bg-gray-50">
-            <div className="bg-white rounded-lg shadow p-4">
+          <div className="border rounded-lg p-4 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30">
+            <div className="bg-white rounded-lg shadow-[0_4px_12px_-2px_rgba(99,102,241,0.1)] hover:shadow-[0_8px_16px_-4px_rgba(99,102,241,0.15)] transition-shadow duration-300 p-4">
               <div className="flex items-center space-x-2 mb-2">
                 <div className="w-12 h-12 bg-gray-200 rounded-full" />
                 <div className="font-semibold">Company Name</div>

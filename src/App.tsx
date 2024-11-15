@@ -8,9 +8,9 @@ function App() {
   const [activeTab, setActiveTab] = useState<'copy' | 'image'>('copy');
 
   return (
-    <div className="flex min-h-screen bg-[#F6F7FA] font-['Poppins',sans-serif] text-[#303B5F]">
+    <div className="flex min-h-screen bg-gradient-to-br from-[#F8F9FD] to-[#F0F2FF] font-['Poppins',sans-serif] text-[#303B5F]">
       {/* Sidebar */}
-      <div className="w-16 bg-white border-r flex flex-col items-center py-4 space-y-4">
+      <div className="w-16 bg-[#F8F9FD] border-r border-gradient-to-b from-blue-100/50 to-purple-100/50 shadow-[2px_0_12px_-2px_rgba(99,102,241,0.1)] flex flex-col items-center py-4 space-y-4 relative z-10">
         <button
           onClick={() => setActiveTab('copy')}
           className={`w-12 h-12 rounded-lg flex items-center justify-center transition-colors ${
@@ -29,15 +29,13 @@ function App() {
         </button>
       </div>
 
-      {/* Main content */}
+      {/* Main content - adjusted header height and background */}
       <div className="flex-1">
-        {/* Header with logo */}
-        <div className="p-6 bg-white border-b">
-          <WKLogo className="h-6 w-auto" />
+        <div className="p-8 bg-[#F8F9FD] border-b border-gradient-to-r from-blue-100/50 to-purple-100/50 shadow-md relative z-[5]">
+          <WKLogo className="h-7.5 w-auto" />
         </div>
         
-        {/* Page content */}
-        <div className="p-6">
+        <div className="p-6 relative">
           {activeTab === 'copy' ? <CopyPage /> : <ImagePage />}
         </div>
       </div>

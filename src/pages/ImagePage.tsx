@@ -418,22 +418,20 @@ export function ImagePage() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-12 gap-6">
-            {/* Image Preview */}
-            <div className="col-span-5">
-              <Card>
-                <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-50">
-                  <img
-                    src={currentImage.preview}
-                    alt="Preview"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              </Card>
-            </div>
+          <div className="space-y-6">
+            {/* Image Preview - Now full width */}
+            <Card>
+              <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-50">
+                <img
+                  src={currentImage.preview}
+                  alt="Preview"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </Card>
 
-            {/* Analysis Results */}
-            <div className="col-span-7 grid grid-cols-2 gap-6">
+            {/* Analysis Results - Grid below image */}
+            <div className="grid grid-cols-2 gap-6">
               {/* Score Card - Full width */}
               <div className="col-span-2">
                 <Card>

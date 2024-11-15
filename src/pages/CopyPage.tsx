@@ -3,8 +3,8 @@ import { BarChart2, Info, ThumbsUp, MessageSquare, Share2, X } from 'lucide-reac
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Card } from '../components/Card';
-import defaultPreview from '../assets/default-preview.jpeg';
 import { LoadingSpinner } from '../components/LoadingSpinner';
+import defaultPreview from '../assets/default-preview.jpeg';
 
 interface PerformanceScore {
   score: number;
@@ -25,10 +25,7 @@ export function CopyPage() {
   const [headline, setHeadline] = useState('');
   const [linkDescription, setLinkDescription] = useState('');
   const [focusedField, setFocusedField] = useState<string | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState({
-    headline: false,
-    linkDescription: false
-  });
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [scores, setScores] = useState<{
     headline: PerformanceScore | null;
     linkDescription: PerformanceScore | null;
@@ -40,7 +37,7 @@ export function CopyPage() {
   const handleAnalyze = async (content: string, type: 'headline' | 'linkDescription') => {
     if (!content.trim()) return;
 
-    setIsAnalyzing(prev => ({ ...prev, [type]: true }));
+    setIsAnalyzing(true);
     
     const url = type === 'headline' 
       ? 'https://recommendationapi-cebwf2ccf6cwgceq.swedencentral-01.azurewebsites.net/api/Copy/headline'
@@ -74,7 +71,7 @@ export function CopyPage() {
     } catch (error) {
       console.error('Analysis failed:', error);
     } finally {
-      setIsAnalyzing(prev => ({ ...prev, [type]: false }));
+      setIsAnalyzing(false);
     }
   };
 
@@ -114,10 +111,10 @@ export function CopyPage() {
       <div className="mt-2 flex justify-end">
         <Button
           onClick={() => handleAnalyze(type === 'headline' ? headline : linkDescription, type)}
-          disabled={isAnalyzing[type]}
+          disabled={isAnalyzing}
           icon={BarChart2}
         >
-          {isAnalyzing[type] ? (
+          {isAnalyzing ? (
             <LoadingSpinner type="copy" className="py-1" />
           ) : "Analyze"}
         </Button>
@@ -193,39 +190,45 @@ export function CopyPage() {
       </div>
 
       <div className="w-96">
-        <Card className="mt-6 w-full max-w-[95%] mx-auto">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold bg-gradient-to-r from-[#4472CA] via-[#5E4BB6] to-[#6366F1] bg-clip-text text-transparent">Preview</h2>
-            <Button variant="ghost" size="sm" icon={Info} />
+        {isAnalyzing ? (
+          <div className="flex justify-center items-center min-h-[200px]">
+            <LoadingSpinner type="copy" className="scale-110" />
           </div>
+        ) : (
+          <Card className="mt-6 w-full max-w-[95%] mx-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold bg-gradient-to-r from-[#4472CA] via-[#5E4BB6] to-[#6366F1] bg-clip-text text-transparent">Preview</h2>
+              <Button variant="ghost" size="sm" icon={Info} />
+            </div>
 
-          <div className="border rounded-lg p-4 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30">
-            <div className="bg-white rounded-lg shadow-[0_4px_12px_-2px_rgba(99,102,241,0.1)] hover:shadow-[0_8px_16px_-4px_rgba(99,102,241,0.15)] transition-shadow duration-300 p-4">
-              <div className="flex items-center space-x-2 mb-2">
-                <div className="w-12 h-12 bg-gray-200 rounded-full" />
-                <div className="font-semibold">Company Name</div>
-              </div>
-              
-              <h3 className="font-semibold mb-2">{headline || 'Your headline will appear here'}</h3>
-              <p className="text-sm text-[#303B5F] mb-4">{linkDescription || 'Your link description will appear here'}</p>
-              
-              <div 
-                className="w-full aspect-[1.91/2] mb-4 rounded-lg overflow-hidden"
-                style={{
-                  backgroundImage: `url(${defaultPreview})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
-                }}
-              />
-              
-              <div className="flex justify-between text-sm text-[#303B5F] border-t pt-2">
-                <Button variant="ghost" size="sm" icon={ThumbsUp}>Like</Button>
-                <Button variant="ghost" size="sm" icon={MessageSquare}>Comment</Button>
-                <Button variant="ghost" size="sm" icon={Share2}>Share</Button>
+            <div className="border rounded-lg p-4 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30">
+              <div className="bg-white rounded-lg shadow-[0_4px_12px_-2px_rgba(99,102,241,0.1)] hover:shadow-[0_8px_16px_-4px_rgba(99,102,241,0.15)] transition-shadow duration-300 p-4">
+                <div className="flex items-center space-x-2 mb-2">
+                  <div className="w-12 h-12 bg-gray-200 rounded-full" />
+                  <div className="font-semibold">Company Name</div>
+                </div>
+                
+                <h3 className="font-semibold mb-2">{headline || 'Your headline will appear here'}</h3>
+                <p className="text-sm text-[#303B5F] mb-4">{linkDescription || 'Your link description will appear here'}</p>
+                
+                <div 
+                  className="w-full aspect-[1.91/2] mb-4 rounded-lg overflow-hidden"
+                  style={{
+                    backgroundImage: `url(${defaultPreview})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                  }}
+                />
+                
+                <div className="flex justify-between text-sm text-[#303B5F] border-t pt-2">
+                  <Button variant="ghost" size="sm" icon={ThumbsUp}>Like</Button>
+                  <Button variant="ghost" size="sm" icon={MessageSquare}>Comment</Button>
+                  <Button variant="ghost" size="sm" icon={Share2}>Share</Button>
+                </div>
               </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        )}
       </div>
     </div>
   );

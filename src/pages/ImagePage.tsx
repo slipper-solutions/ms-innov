@@ -374,12 +374,8 @@ export function ImagePage() {
             />
             
             {isAnalyzing ? (
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center">
-                  <Sparkle className="h-8 w-8 text-blue-500 animate-pulse" />
-                </div>
-                <p className="mt-4 text-base text-gray-600">Analyzing your image...</p>
-                <p className="text-sm text-gray-500">This might take a few seconds</p>
+              <div className="flex justify-center items-center min-h-[200px]">
+                <LoadingSpinner type="image" className="scale-110" />
               </div>
             ) : (
               <>

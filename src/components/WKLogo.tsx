@@ -6,7 +6,7 @@ export function WKLogo({ className = '' }: { className?: string }) {
     <img 
       src={logoImage} 
       alt="Wonderkind" 
-      className={className}
+      className={`h-[1.85rem] w-auto ${className}`}
     />
   );
 } 

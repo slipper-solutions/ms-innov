@@ -193,7 +193,7 @@ export function CopyPage() {
       </div>
 
       <div className="w-96">
-        <Card className="relative transition-all hover:shadow-lg">
+        <Card className="mt-6 w-full max-w-[95%] mx-auto">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold bg-gradient-to-r from-[#4472CA] via-[#5E4BB6] to-[#6366F1] bg-clip-text text-transparent">Preview</h2>
             <Button variant="ghost" size="sm" icon={Info} />

@@ -180,55 +180,52 @@ export function CopyPage() {
   );
 
   return (
-    <div className="p-8 flex space-x-8">
-      <div className="flex-1">
-        <Card>
-          <h2 className="text-2xl font-bold mb-6">Create your ad copy</h2>
-          {renderInputField('headline', 'Headline')}
-          {renderInputField('linkDescription', 'Link Description')}
-        </Card>
-      </div>
-
-      <div className="w-96">
-        {isAnalyzing ? (
+    <div className="grid grid-cols-[1fr,400px] gap-6">
+      <div className="space-y-4">
+        {renderInputField('headline', 'Headline')}
+        {renderInputField('linkDescription', 'Link Description')}
+        
+        {isAnalyzing && (
           <div className="flex justify-center items-center min-h-[200px]">
             <LoadingSpinner type="copy" className="scale-110" />
           </div>
-        ) : (
-          <Card className="mt-6 w-full max-w-[95%] mx-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold bg-gradient-to-r from-[#4472CA] via-[#5E4BB6] to-[#6366F1] bg-clip-text text-transparent">Preview</h2>
-              <Button variant="ghost" size="sm" icon={Info} />
-            </div>
+        )}
+      </div>
 
-            <div className="border rounded-lg p-4 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30">
-              <div className="bg-white rounded-lg shadow-[0_4px_12px_-2px_rgba(99,102,241,0.1)] hover:shadow-[0_8px_16px_-4px_rgba(99,102,241,0.15)] transition-shadow duration-300 p-4">
-                <div className="flex items-center space-x-2 mb-2">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full" />
-                  <div className="font-semibold">Company Name</div>
-                </div>
-                
-                <h3 className="font-semibold mb-2">{headline || 'Your headline will appear here'}</h3>
-                <p className="text-sm text-[#303B5F] mb-4">{linkDescription || 'Your link description will appear here'}</p>
-                
-                <div 
-                  className="w-full aspect-[1.91/2] mb-4 rounded-lg overflow-hidden"
-                  style={{
-                    backgroundImage: `url(${defaultPreview})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                  }}
-                />
-                
-                <div className="flex justify-between text-sm text-[#303B5F] border-t pt-2">
-                  <Button variant="ghost" size="sm" icon={ThumbsUp}>Like</Button>
-                  <Button variant="ghost" size="sm" icon={MessageSquare}>Comment</Button>
-                  <Button variant="ghost" size="sm" icon={Share2}>Share</Button>
-                </div>
+      <div className="relative">
+        <Card>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold bg-gradient-to-r from-[#4472CA] via-[#5E4BB6] to-[#6366F1] bg-clip-text text-transparent">Preview</h2>
+            <Button variant="ghost" size="sm" icon={Info} />
+          </div>
+
+          <div className="border rounded-lg p-4 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30">
+            <div className="bg-white rounded-lg shadow-[0_4px_12px_-2px_rgba(99,102,241,0.1)] hover:shadow-[0_8px_16px_-4px_rgba(99,102,241,0.15)] transition-shadow duration-300 p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <div className="w-12 h-12 bg-gray-200 rounded-full" />
+                <div className="font-semibold">Company Name</div>
+              </div>
+              
+              <h3 className="font-semibold mb-2">{headline || 'Your headline will appear here'}</h3>
+              <p className="text-sm text-[#303B5F] mb-4">{linkDescription || 'Your link description will appear here'}</p>
+              
+              <div 
+                className="w-full aspect-[1.91/2] mb-4 rounded-lg overflow-hidden"
+                style={{
+                  backgroundImage: `url(${defaultPreview})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              />
+              
+              <div className="flex justify-between text-sm text-[#303B5F] border-t pt-2">
+                <Button variant="ghost" size="sm" icon={ThumbsUp}>Like</Button>
+                <Button variant="ghost" size="sm" icon={MessageSquare}>Comment</Button>
+                <Button variant="ghost" size="sm" icon={Share2}>Share</Button>
               </div>
             </div>
-          </Card>
-        )}
+          </div>
+        </Card>
       </div>
     </div>
   );

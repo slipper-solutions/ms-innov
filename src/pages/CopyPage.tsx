@@ -114,9 +114,7 @@ export function CopyPage() {
           disabled={isAnalyzing}
           icon={BarChart2}
         >
-          {isAnalyzing ? (
-            <LoadingSpinner type="copy" className="py-1" />
-          ) : "Analyze"}
+          Analyze
         </Button>
       </div>
 
@@ -184,12 +182,6 @@ export function CopyPage() {
       <div className="space-y-4">
         {renderInputField('headline', 'Headline')}
         {renderInputField('linkDescription', 'Link Description')}
-        
-        {isAnalyzing && (
-          <div className="flex justify-center items-center min-h-[200px]">
-            <LoadingSpinner type="copy" className="scale-110" />
-          </div>
-        )}
       </div>
 
       <div className="relative">
@@ -227,6 +219,12 @@ export function CopyPage() {
           </div>
         </Card>
       </div>
+
+      {isAnalyzing && (
+        <div className="fixed inset-0 bg-white/50 flex items-center justify-center z-50">
+          <LoadingSpinner type="copy" className="scale-110" />
+        </div>
+      )}
     </div>
   );
 }

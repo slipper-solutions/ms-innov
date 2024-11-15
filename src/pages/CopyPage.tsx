@@ -3,6 +3,7 @@ import { BarChart2, Info, ThumbsUp, MessageSquare, Share2, X } from 'lucide-reac
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Card } from '../components/Card';
+import defaultPreview from '../assets/default-preview.jpeg';
 
 interface PerformanceScore {
   score: number;
@@ -204,6 +205,15 @@ export function CopyPage() {
               
               <h3 className="font-semibold mb-2">{headline || 'Your headline will appear here'}</h3>
               <p className="text-sm text-[#303B5F] mb-4">{linkDescription || 'Your link description will appear here'}</p>
+              
+              <div 
+                className="w-full aspect-[1.91/2] mb-4 rounded-lg overflow-hidden"
+                style={{
+                  backgroundImage: `url(${defaultPreview})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              />
               
               <div className="flex justify-between text-sm text-[#303B5F] border-t pt-2">
                 <Button variant="ghost" size="sm" icon={ThumbsUp}>Like</Button>

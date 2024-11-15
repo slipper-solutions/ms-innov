@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Copy, Image } from 'lucide-react';
 import { CopyPage } from './pages/CopyPage';
 import { ImagePage } from './pages/ImagePage';
+import { WKLogo } from './components/WKLogo';
 
 function App() {
   const [activeTab, setActiveTab] = useState<'copy' | 'image'>('copy');
@@ -30,7 +31,15 @@ function App() {
 
       {/* Main content */}
       <div className="flex-1">
-        {activeTab === 'copy' ? <CopyPage /> : <ImagePage />}
+        {/* Header with logo */}
+        <div className="p-6 bg-white border-b">
+          <WKLogo className="h-6 w-auto" />
+        </div>
+        
+        {/* Page content */}
+        <div className="p-6">
+          {activeTab === 'copy' ? <CopyPage /> : <ImagePage />}
+        </div>
       </div>
     </div>
   );
